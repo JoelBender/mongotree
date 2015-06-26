@@ -428,7 +428,7 @@ class MongoTree(object):
                 # ask the class for an identifier
                 try:
                     some_dict['_id'] = self.marshal.node_id_class()
-                except Exception, err:
+                except Exception as err:
                     raise RuntimeError("node identifier instance error: " +
                                        str(err))
         else:
