@@ -14,8 +14,9 @@ The database connection/collection parameters can be specified
 as environment variables or override by CLI options.
 """
 
-import mongotreetest
+from . import mongotreetest
 
+from . import test_1
 
 def setUpPackage():
     mongotreetest.setUpPackage()

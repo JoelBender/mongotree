@@ -10,7 +10,7 @@ Tests for `mongotree` module.
 
 import unittest
 
-from mongotreetest import bacpypes_debugging, ModuleLogger, MongoTreeTestContext
+from .mongotreetest import bacpypes_debugging, ModuleLogger, MongoTreeTestContext
 
 # some debugging
 _debug = 0
