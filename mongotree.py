@@ -10,10 +10,9 @@ This is something.
 
 __author__ = 'Joel Bender'
 __email__ = 'joel@carrickbender.com'
-__version__ = '0.1.1'
+__version__ = '0.1.3'
 
 import bson
-from copy import copy as _copy
 
 
 class NodeNotFound(Exception):
@@ -545,7 +544,8 @@ class MongoTree(object):
 
     def flush_cache(self):
         # save all the modified nodes and remove them from the cache
-        for node in _copy(self.node_cache.values()):
+        node_list = list(self.node_cache.values())
+        for node in node_list:
             if node._modified:
                 self.save_node(node)
             self.unbind(node)
