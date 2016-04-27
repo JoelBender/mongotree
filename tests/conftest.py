@@ -9,6 +9,7 @@ fixture for MongoTree tests.
 
 import os
 import sys
+import pytest
 
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 from bacpypes.consolelogging import ArgumentParser
@@ -30,12 +31,12 @@ test_dump = False
 
 
 #
-#   setUpPackage
+#   setup_package
 #
 
 
 @bacpypes_debugging
-def setUpPackage():
+def setup_package():
     global test_host, test_connection, test_database, test_collection, \
         test_flush, test_dump
 
@@ -73,47 +74,56 @@ def setUpPackage():
     arg_str = os.getenv("MONGOTREE_DEBUG") or ""
     test_args = parser.parse_args(arg_str.split())
 
-    if _debug: setUpPackage._debug("setUpPackage")
-    if _debug: setUpPackage._debug("    - test_args: %r", test_args)
+    if _debug: setup_package._debug("setup_package")
+    if _debug: setup_package._debug("    - test_args: %r", test_args)
 
     # save the host
     test_host = test_args.host
-    if _debug: setUpPackage._debug("    - test_host: %r", test_host)
+    if _debug: setup_package._debug("    - test_host: %r", test_host)
 
     # create a connection
     test_connection = pymongo.MongoClient(test_args.host)
-    if _debug: setUpPackage._debug("    - test_connection: %r", test_connection)
+    if _debug: setup_package._debug("    - test_connection: %r", test_connection)
 
     # reference a database
     test_database = test_connection[test_args.db]
-    if _debug: setUpPackage._debug("    - test_database: %r", test_database)
+    if _debug: setup_package._debug("    - test_database: %r", test_database)
 
     # reference a collection
     test_collection = test_database[test_args.collection]
-    if _debug: setUpPackage._debug("    - test_collection: %r", test_collection)
+    if _debug: setup_package._debug("    - test_collection: %r", test_collection)
 
     # flush before each case
     test_flush = test_args.flush
-    if _debug: setUpPackage._debug("    - test_flush: %r", test_flush)
+    if _debug: setup_package._debug("    - test_flush: %r", test_flush)
 
     # dump after each case
     test_dump = test_args.dump
-    if _debug: setUpPackage._debug("    - test_dump: %r", test_dump)
+    if _debug: setup_package._debug("    - test_dump: %r", test_dump)
 
 
 #
-#   tearDownPackage
+#   teardown_package
 #
 
 
 @bacpypes_debugging
-def tearDownPackage():
-    if _debug: tearDownPackage._debug("tearDownPackage")
+def teardown_package():
+    if _debug: teardown_package._debug("teardown_package")
     global test_connection
 
     # close the connection
     test_connection.close()
 
+
+#
+#   Database Fixture
+#
+
+@pytest.fixture(scope="session")
+def db(request):
+    setup_package()
+    request.addfinalizer(teardown_package)
 
 #
 #   MongoTreeTestContext
