@@ -14,7 +14,7 @@ import unittest
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 
 # import conftest
-from conftest import MongoTreeTestContext
+from .conftest import MongoTreeTestContext
 
 # some debugging
 _debug = 0
