@@ -22,11 +22,6 @@ _log = ModuleLogger(globals())
 
 
 @bacpypes_debugging
-def test_fixture(db):
-    if _debug: test_fixture._debug("test_fixture %r", db)
-
-
-@bacpypes_debugging
 def setup_module(module):
     if _debug: setup_module._debug("setup_module %r", module)
 
