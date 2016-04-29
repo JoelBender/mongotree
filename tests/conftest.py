@@ -1,21 +1,15 @@
 #!/usr/bin/python
 
 """
-MongoTreeTest
-
-This module contains the base class for developing a test
-fixture for MongoTree tests.
 """
 
 import os
 import sys
 import pytest
+import pymongo
 
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 from bacpypes.consolelogging import ArgumentParser
-
-import pymongo
-from mongotree import MongoTree
 
 # some debugging
 _debug = 0
@@ -33,7 +27,6 @@ test_dump = False
 #
 #   pytest_configure
 #
-
 
 @bacpypes_debugging
 def pytest_configure(config):
@@ -109,70 +102,3 @@ def pytest_unconfigure():
 
     # close the connection
     test_connection.close()
-
-
-#
-#   MongoTreeTestContext
-#
-
-@bacpypes_debugging
-class MongoTreeTestContext(MongoTree):
-
-    def __init__(self, collection=None, marshal=None):
-        if _debug: MongoTreeTestContext._debug("__init__ %r", marshal)
-
-        # provide a default collection
-        if collection is None:
-            collection = test_collection
-
-        # continue initializing a tree
-        MongoTree.__init__(self, collection, marshal)
-
-    def setUp(self, flush=None):
-        if _debug: MongoTreeTestContext._debug("setUp %r", flush)
-        global test_flush
-
-        # check for local override
-        if flush is None:
-            flush = test_flush
-
-        # flush first
-        if flush:
-            stats = self.collection.remove()
-            if _debug: MongoTreeTestContext._debug("    - flush stats: %r", stats)
-        else:
-            if _debug: MongoTreeTestContext._debug("    - no flush")
-
-        # easier method chaining
-        return self
-
-    def tearDown(self, dump=None):
-        if _debug: MongoTreeTestContext._debug("tearDown %r", dump)
-        global test_dump
-
-        # check for parameter override
-        if dump is None:
-            dump = test_dump
-
-        # flush the cache
-        self.flush_cache()
-
-        # dump the contents
-        if dump:
-            for doc in self.collection.find():
-                attrs_str = ''.join(
-                    "        %s: %r,\n" % (attr_name, attr_value)
-                    for attr_name, attr_value in doc['_attrs'].items()
-                    )
-                contents_str = ''.join(
-                    "        %r,\n" % (node_id,)
-                    for node_id in doc['_contents']
-                    )
-                sys.stdout.write("%r\n    attrs: {\n%s        },\n    contents: [\n%s        ]\n"
-                                 % (doc['_id'], attrs_str, contents_str)
-                                 )
-        else:
-            if _debug: MongoTreeTestContext._debug("    - no dump")
-
-        # consistent method chaining
-        return self

@@ -13,13 +13,14 @@ import unittest
 
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 
-# import conftest
-from .conftest import MongoTreeTestContext
-
 # some debugging
 _debug = 0
 _log = ModuleLogger(globals())
 
+
+#
+#   Module Setup and Teardown
+#
 
 @bacpypes_debugging
 def setup_module(module):
@@ -30,25 +31,50 @@ def teardown_module(module):
     if _debug: teardown_module._debug("teardown_module %r", module)
 
 
+#
+#   Function Testing Setup and Teardown
+#
+
 @bacpypes_debugging
-class TestMongotree(unittest.TestCase):
+def setup_function(function):
+    if _debug: setup_function._debug("setup_function %r", function)
+
+@bacpypes_debugging
+def teardown_function(function):
+    if _debug: teardown_function._debug("teardown_function %r", function)
+
+
+#
+#   Test Function
+#
+
+@bacpypes_debugging
+def test_something():
+    if _debug: test_something._debug("test_something")
+
+#
+#   Test Class Template
+#
+
+@bacpypes_debugging
+class TestClass(unittest.TestCase):
 
     @classmethod
     def setup_class(cls):
-        if _debug: TestMongotree._debug("setup_class %r", cls)
+        if _debug: TestClass._debug("setup_class %r", cls)
 
     @classmethod
     def teardown_class(cls):
-        if _debug: TestMongotree._debug("teardown_class %r", cls)
+        if _debug: TestClass._debug("teardown_class %r", cls)
 
     def setup_method(self, method):
-        if _debug: TestMongotree._debug("setup_method %r %r", self, method)
+        if _debug: TestClass._debug("setup_method %r %r", self, method)
 
     def teardown_method(self, method):
-        if _debug: TestMongotree._debug("teardown_method %r %r", self, method)
+        if _debug: TestClass._debug("teardown_method %r %r", self, method)
 
     def test_something(self):
-        if _debug: TestMongotree._debug("test_something")
+        if _debug: TestClass._debug("test_something")
 
     def test_something_else(self):
-        if _debug: TestMongotree._debug("test_something_else")
+        if _debug: TestClass._debug("test_something_else")

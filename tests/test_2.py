@@ -13,7 +13,7 @@ import unittest
 
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 
-from .context import MongoTreeClassContext
+from .context import MongoTreeMethodContext
 
 # some debugging
 _debug = 0
@@ -21,7 +21,7 @@ _log = ModuleLogger(globals())
 
 
 @bacpypes_debugging
-class TestMongotree(MongoTreeClassContext):
+class TestMongotree(MongoTreeMethodContext):
 
     def test_something(self):
         if _debug: TestMongotree._debug("test_something [context=%r]", self.context)
