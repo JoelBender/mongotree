@@ -14,7 +14,7 @@ from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 from bacpypes.consolelogging import ArgumentParser
 
 from . import conftest
-from mongotree import MongoTree
+import mongotree
 
 # some debugging
 _debug = 0
@@ -26,7 +26,7 @@ _log = ModuleLogger(globals())
 #
 
 @bacpypes_debugging
-class MongoTreeTestContext(MongoTree):
+class MongoTreeTestContext(mongotree.MongoTree):
 
     def __init__(self, collection=None, marshal=None):
         if _debug: MongoTreeTestContext._debug("__init__ %r", marshal)
@@ -36,7 +36,7 @@ class MongoTreeTestContext(MongoTree):
             collection = conftest.test_collection
 
         # continue initializing a tree
-        MongoTree.__init__(self, collection, marshal)
+        mongotree.MongoTree.__init__(self, collection, marshal)
 
     def setup_context(self, flush=None):
         if _debug: MongoTreeTestContext._debug("setup_context flush=%r", flush)
@@ -51,9 +51,6 @@ class MongoTreeTestContext(MongoTree):
             if _debug: MongoTreeTestContext._debug("    - flush stats: %r", stats)
         else:
             if _debug: MongoTreeTestContext._debug("    - no flush")
-
-        # easier method chaining
-        return self
 
     def teardown_context(self, dump=None):
         if _debug: MongoTreeTestContext._debug("teardown_context dump=%r", dump)
@@ -81,9 +78,6 @@ class MongoTreeTestContext(MongoTree):
                                  )
         else:
             if _debug: MongoTreeTestContext._debug("    - no dump")
-
-        # consistent method chaining
-        return self
 
 
 #
