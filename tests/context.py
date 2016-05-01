@@ -13,8 +13,8 @@ import unittest
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 from bacpypes.consolelogging import ArgumentParser
 
-from . import conftest
 import mongotree
+from . import utilities
 
 # some debugging
 _debug = 0
@@ -33,7 +33,7 @@ class MongoTreeTestContext(mongotree.MongoTree):
 
         # provide a default collection
         if collection is None:
-            collection = conftest.test_collection
+            collection = utilities.test_collection
 
         # continue initializing a tree
         mongotree.MongoTree.__init__(self, collection, marshal)
@@ -43,7 +43,7 @@ class MongoTreeTestContext(mongotree.MongoTree):
 
         # check for local override
         if flush is None:
-            flush = conftest.test_flush
+            flush = utilities.test_flush
 
         # flush first
         if flush:
@@ -57,7 +57,7 @@ class MongoTreeTestContext(mongotree.MongoTree):
 
         # check for parameter override
         if dump is None:
-            dump = conftest.test_dump
+            dump = utilities.test_dump
 
         # flush the cache
         self.flush_cache()
