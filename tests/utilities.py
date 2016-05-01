@@ -29,7 +29,7 @@ test_dump = False
 #
 
 @bacpypes_debugging
-def setup_package(config):
+def setup_package():
     global test_host, test_connection, test_database, test_collection, \
         test_flush, test_dump
 
