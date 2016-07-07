@@ -8,6 +8,8 @@ import sys
 import pytest
 import pymongo
 
+import pymongo.periodic_executor
+
 from bacpypes.debugging import bacpypes_debugging, ModuleLogger
 from bacpypes.consolelogging import ArgumentParser
 
@@ -94,6 +96,8 @@ def setup_package():
     test_dump = test_args.dump
     if _debug: setup_package._debug("    - test_dump: %r", test_dump)
 
+    if _debug: setup_package._debug("    - periodic executors: %r", pymongo.periodic_executor._EXECUTORS)
+
 
 @bacpypes_debugging
 def teardown_package():
@@ -102,3 +106,6 @@ def teardown_package():
 
     # close the connection
     test_connection.close()
+    if _debug: teardown_package._debug("    - connection closed")
+
+    if _debug: teardown_package._debug("    - periodic executors: %r", pymongo.periodic_executor._EXECUTORS)
